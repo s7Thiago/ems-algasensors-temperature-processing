@@ -1,4 +1,4 @@
-package com.thiagosilva.algasensors.temperature.processing;
+package com.thiagosilva.algasensors.temperature.processing.common;
 
 import java.util.UUID;
 

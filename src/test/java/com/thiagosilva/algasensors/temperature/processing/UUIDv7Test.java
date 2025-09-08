@@ -8,10 +8,9 @@ import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import com.thiagosilva.algasensors.temperature.processing.common.IdGenerator;
+import com.thiagosilva.algasensors.temperature.processing.common.UUIDv7Utils;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UUIDv7Test {
 
     @Test
@@ -25,16 +24,18 @@ public class UUIDv7Test {
 
         int index = 1;
         for (UUID id : ids) {
-            System.out.printf("UUID gerado %d - %s (   time:  %s )\n", index, id, UUIDv7Utils.extractOffsetDateTime(id));
+            System.out.printf("UUID gerado %d - %s (   time:  %s )\n", index, id,
+                    UUIDv7Utils.extractOffsetDateTime(id));
             index++;
         }
     }
 
     @Test
-     void shouldVerifyUUIDv7CorrectTimestamp() {
+    void shouldVerifyUUIDv7CorrectTimestamp() {
         UUID uuid = IdGenerator.generateTimeBasedUUID();
 
-        // Gera o timestamp truncando de forma que ignora a parte de segundos e milissegundos, considerando apenas escala de minutos
+        // Gera o timestamp truncando de forma que ignora a parte de segundos e
+        // milissegundos, considerando apenas escala de minutos
         OffsetDateTime uuidDateTime = UUIDv7Utils.extractOffsetDateTime(uuid).truncatedTo(ChronoUnit.MINUTES);
         OffsetDateTime currenOffsetDateTime = OffsetDateTime.now().truncatedTo(ChronoUnit.MINUTES);
 
