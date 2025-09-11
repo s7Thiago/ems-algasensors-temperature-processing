@@ -1,7 +1,6 @@
 plugins {
 	id 'idea'
 	id 'java'
-	id 'eclipse'
 	id 'org.springframework.boot' version '3.5.0'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -22,21 +21,6 @@ idea {
 	}
 }
 
-eclipse {
-    classpath {
-        downloadSources = true
-        downloadJavadoc = true
-    }
-}
-
-// Task para garantir download
-task downloadDependencies {
-    doLast {
-        configurations.compileClasspath.resolve()
-        configurations.runtimeClasspath.resolve()
-    }
-}
-
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
@@ -49,6 +33,7 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'com.fasterxml.uuid:java-uuid-generator:5.1.0'
 	implementation("org.apache.commons:commons-lang3:3.17.0")
