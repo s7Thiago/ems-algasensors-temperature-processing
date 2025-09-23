@@ -2,6 +2,7 @@ package com.thiagosilva.algasensors.temperature.processing.api.controller;
 
 import java.time.OffsetDateTime;
 
+import org.springframework.amqp.core.MessagePostProcessor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,7 +56,17 @@ public class TemperatureProcessingController {
         String routingKey = "";
         Object payload = logOutput;
 
-        rabbitTemplate.convertAndSend(exchange, routingKey, payload);
+        /*
+         * Permite manipupar as mensagens que vão para a fila, adicionando, por exemplo, headers
+         * em cada uma, que poderá ser usado no consumidor para realizar alguma lógica de negócio
+         * 
+        */
+        MessagePostProcessor messagePostProcessor = (MessagePostProcessor) message -> {
+            message.getMessageProperties().setHeader("sensorId", logOutput.getSensorId().toString());
+            return message;
+        };
+
+        rabbitTemplate.convertAndSend(exchange, routingKey, payload, messagePostProcessor);
     }
 
 }
