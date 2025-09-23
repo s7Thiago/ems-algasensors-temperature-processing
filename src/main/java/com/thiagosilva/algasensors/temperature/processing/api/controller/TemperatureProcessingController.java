@@ -2,6 +2,7 @@ package com.thiagosilva.algasensors.temperature.processing.api.controller;
 
 import java.time.OffsetDateTime;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,12 +18,16 @@ import com.thiagosilva.algasensors.temperature.processing.common.IdGenerator;
 import io.hypersistence.tsid.TSID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import com.thiagosilva.algasensors.temperature.processing.infrastructure.rabbitmq.RabbitMQConfig;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/sensors/{sensorId}/temperatures/data")
 @RequiredArgsConstructor
 public class TemperatureProcessingController {
+
+    // Bean padrão do spring para publicar mensagens no rabbitmq
+    private final RabbitTemplate rabbitTemplate;
 
     @PostMapping(consumes = MediaType.TEXT_PLAIN_VALUE)
     public void data(@PathVariable("sensorId") TSID sensorId, @RequestBody String input) {
@@ -45,6 +50,12 @@ public class TemperatureProcessingController {
                 .build();
 
         log.info(logOutput.toString());
+
+        String exchange = RabbitMQConfig.FANOUT_EXCHANGE_NAME;
+        String routingKey = "";
+        Object payload = logOutput;
+
+        rabbitTemplate.convertAndSend(exchange, routingKey, payload);
     }
 
 }
