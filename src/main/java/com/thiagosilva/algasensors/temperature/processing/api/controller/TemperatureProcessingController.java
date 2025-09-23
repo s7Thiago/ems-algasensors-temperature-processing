@@ -19,7 +19,7 @@ import com.thiagosilva.algasensors.temperature.processing.common.IdGenerator;
 import io.hypersistence.tsid.TSID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.thiagosilva.algasensors.temperature.processing.infrastructure.rabbitmq.RabbitMQConfig;
+import static com.thiagosilva.algasensors.temperature.processing.infrastructure.rabbitmq.RabbitMQConfig.FANOUT_EXCHANGE_NAME;;
 
 @Slf4j
 @RestController
@@ -52,7 +52,7 @@ public class TemperatureProcessingController {
 
         log.info(logOutput.toString());
 
-        String exchange = RabbitMQConfig.FANOUT_EXCHANGE_NAME;
+        String exchange = FANOUT_EXCHANGE_NAME;
         String routingKey = "";
         Object payload = logOutput;
 

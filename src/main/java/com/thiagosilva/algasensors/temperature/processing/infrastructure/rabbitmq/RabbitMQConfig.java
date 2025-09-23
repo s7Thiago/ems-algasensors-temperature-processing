@@ -19,7 +19,7 @@ public class RabbitMQConfig {
      * Carrega o bean do jackson para dentro do rabbitmq
      * fazendo com que os payloads complexos que forem 
      * publiclados em filas através dele sejam serializados
-     * automaticamente
+     * automaticamente para json
     */
     @Bean
     public Jackson2JsonMessageConverter jackson2XmlMessageConverter(ObjectMapper mapper) {
